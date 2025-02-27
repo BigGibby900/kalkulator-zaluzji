@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Cen Żaluzji</title>
+    <!-- Poprawiona ścieżka do pliku CSS -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        function toggleSubmenu(id) {
+            // Ukrywa inne submenü i pokazuje to wybrane
+            var submenus = document.querySelectorAll('.subcategory');
+            submenus.forEach(function(submenu) {
+                if (submenu.id !== id) {
+                    submenu.style.display = "none";
+                }
+            });
+
+            var submenu = document.getElementById(id);
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+        }
+    </script>
+</head>
+<body>
+    <h1>Kalkulator Cen</h1>
+    <div class="menu">
+        <!-- Kategoria "Żaluzje Drewno" -->
+        <div class="category" onclick="toggleSubmenu('drewno')">Żaluzje Drewno</div>
+        <div id="drewno" class="subcategory">
+            <a href="/static/drewno_25.html">Drewno/Bamboo 25MM</a>
+            <a href="/static/laminat_25.html">Laminat 25MM</a>
+            <a href="/static/drewno_50.html">Drewno/Bamboo 50MM</a>
+            <a href="/static/laminat_50.html">Laminat 50MM</a>
+            <a href="/static/africa_50.html">Africa 50MM</a>
+            <a href="/static/fauxwood_50.html">Faux Wood (PVC) 50MM</a>
+        </div>
+
+        <!-- Kategoria "Żaluzje Aluminium" -->
+        <div class="category" onclick="toggleSubmenu('aluminium')">Żaluzje Aluminium</div>
+        <div id="aluminium" class="subcategory">
+            <a href="/static/alu_16_a.html">16MM Grupa A</a>
+            <a href="/static/alu_16_b.html">16MM Grupa B</a>
+            <a href="/static/alu_25_a.html">25MM Grupa A</a>
+            <a href="/static/alu_25_b.html">25MM Grupa B</a>
+            <a href="/static/alu_25_c.html">25MM Grupa C</a>
+            <a href="/static/alu_25_d.html">25MM Grupa D</a>
+            <a href="/static/alu_25_e.html">25MM Grupa E</a>
+            <a href="/static/alu_50_a.html">50MM Grupa A</a>
+            <a href="/static/alu_50_b.html">50MM Grupa B</a>
+            <a href="/static/alu_50_c.html">50MM Grupa C</a>
+            <a href="/static/alu_50_d.html">50MM Grupa D</a>
+            <a href="/static/alu_50_ae.html">50MM Grupa AE</a>
+            <a href="/static/alu_50_be.html">50MM Grupa BE</a>
+        </div>
+
+        <!-- Kategoria "Moskitiery" -->
+        <div class="category" onclick="toggleSubmenu('moskitiery')">Moskitiery</div>
+        <div id="moskitiery" class="subcategory">
+            <a href="/static/moskitiery_ramkowe_podstawowe.html">Ramkowe Kolory Podstawowe</a>
+            <a href="/static/moskitiery_ramkowe_premium.html">Ramkowe Kolory Premium</a>
+            <a href="/static/moskitiery_drzwiowe_podstawowe.html">Drzwiowe Kolory Podstawowe</a>
+            <a href="/static/moskitiery_drzwiowe_premium.html">Drzwiowe Kolory Premium</a>
+            <a href="/static/moskitiery_rolowane_biale.html">Rolowane Białe</a>
+            <a href="/static/moskitiery_rolowane_kolory.html">Rolowane Inne Kolory</a>
+        </div>
+    </div>
+</body>
+</html>

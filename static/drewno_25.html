@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Żaluzje Drewniane 25MM</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Żaluzje Drewniane/Bamboo 25MM</h1>
+        <nav>
+            <a href="index.html">Strona Główna</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Kalkulator cen</h2>
+        <label for="width">Szerokość (cm):</label>
+        <input type="number" id="width" placeholder="Wpisz szerokość" required>
+
+        <label for="height">Wysokość (cm):</label>
+        <input type="number" id="height" placeholder="Wpisz wysokość" required>
+
+        <button onclick="calculatePrice()">Sprawdź cenę</button>
+        
+        <p id="result"></p>
+    </main>
+
+    <script>
+        function calculatePrice() {
+            const width = document.getElementById("width").value;
+            const height = document.getElementById("height").value;
+            const category = "drewno_25";  // Kategoria dla tego pliku
+
+            if (!width || !height) {
+                document.getElementById("result").innerText = "Wprowadź szerokość i wysokość!";
+                return;
+            }
+
+            fetch(`http://127.0.0.1:8000/cena/?category=${category}&szerokosc=${width}&wysokosc=${height}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("result").innerText = "Błąd: " + data.error;
+                    } else {
+                        document.getElementById("result").innerText = 
+                            `Cena: ${data.cena} zł (zaokrąglone do: ${data.zaokraglona_szerokosc}x${data.zaokraglona_wysokosc})`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("result").innerText = "Błąd połączenia z serwerem.";
+                    console.error("Błąd pobierania danych:", error);
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f7f7f7; /* Jasnoszare tło */
+    color: #333; /* Ciemnoszary tekst */
+}
+
+.menu {
+    width: 300px;
+    margin: 20px auto;
+    text-align: center; /* Wyśrodkowanie tekstu */
+}
+
+.category {
+    background-color: #ddd; /* Stonowana szarość */
+    padding: 15px;
+    cursor: pointer;
+    border: 1px solid #bbb; /* Ciemniejsza szarość dla kontrastu */
+    margin-top: 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center; /* Wyśrodkowanie tekstu */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.category:hover {
+    background-color: #b5b5b5; /* Lekko ciemniejszy szary po najechaniu */
+    transform: scale(1.05); /* Subtelne powiększenie */
+}
+
+.subcategory {
+    display: none;
+    padding-left: 20px;
+}
+
+.subcategory a {
+    display: block;
+    padding: 6px;
+    text-decoration: none;
+    color: #444; /* Lekko przygaszony odcień */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.subcategory a:hover {
+    background-color: #aaa; /* Podświetlenie na szaro po najechaniu */
+    border-radius: 5px;
+}
+
