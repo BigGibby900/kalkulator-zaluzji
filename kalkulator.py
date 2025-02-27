@@ -5,13 +5,15 @@ from fastapi.responses import FileResponse
 import pandas as pd
 import math
 import os
+import socket
+import uvicorn
 
 app = FastAPI()
 
 # Pozwolenie na połączenia z frontendem
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Pozwolenie na połączenia z dowolnego źródła
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -97,5 +99,5 @@ async def get_index():
 
 # Dynamicznie ustawiając host na Render
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=10000)  # Zmieniony port na 10000
+    port = int(os.environ.get("PORT", 8000))  # Domyślnie 8000, ale na Renderze będzie to port z ENV
+    uvicorn.run(app, host="0.0.0.0", port=port)
