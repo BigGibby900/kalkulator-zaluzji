@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Żaluzje Drewniane 25MM</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <header>
@@ -38,7 +38,6 @@
                 return;
             }
 
-            // Użycie pełnego URL do serwera na Render
             fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&szerokosc=${width}&wysokosc=${height}`)
                 .then(response => response.json())
                 .then(data => {
