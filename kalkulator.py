@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 import pandas as pd
 import math
 import os
+import socket
 
 app = FastAPI()
 
@@ -95,6 +96,7 @@ def get_cena(
 async def get_index():
     return FileResponse('static/index.html')  # Wskazuje na plik index.html w katalogu static
 
+# Dynamicznie ustawiając host na Render
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
