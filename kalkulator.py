@@ -5,7 +5,6 @@ from fastapi.responses import FileResponse
 import pandas as pd
 import math
 import os
-import socket
 import uvicorn
 
 app = FastAPI()
