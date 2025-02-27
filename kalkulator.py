@@ -5,7 +5,6 @@ from fastapi.responses import FileResponse
 import pandas as pd
 import math
 import os
-import socket
 
 app = FastAPI()
 
@@ -99,4 +98,4 @@ async def get_index():
 # Dynamicznie ustawiając host na Render
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=10000)  # Zmieniony port na 10000
