@@ -4,20 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Cen Żaluzji</title>
-    <!-- Poprawiona ścieżka do pliku CSS -->
     <link rel="stylesheet" href="/static/styles.css">
     <script>
-        function toggleSubmenu(id) {
-            // Ukrywa inne submenü i pokazuje to wybrane
-            var submenus = document.querySelectorAll('.subcategory');
-            submenus.forEach(function(submenu) {
-                if (submenu.id !== id) {
-                    submenu.style.display = "none";
-                }
-            });
+        async function calculatePrice() {
+            const category = "drewno_25"; // Można zmieniać w zależności od wybranej opcji
+            const width = parseInt(document.getElementById("width").value);
+            const height = parseInt(document.getElementById("height").value);
 
-            var submenu = document.getElementById(id);
-            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+            if (isNaN(width) || isNaN(height)) {
+                alert("Proszę podać prawidłowe wymiary.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&szerokosc=${width}&wysokosc=${height}`);
+
+                if (!response.ok) {
+                    throw new Error("Błąd połączenia z serwerem");
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById("price").innerText = `Cena: ${data.cena} PLN`;
+                    document.getElementById("roundedWidth").innerText = `Zaokrąglona szerokość: ${data.zaokraglona_szerokosc} cm`;
+                    document.getElementById("roundedHeight").innerText = `Zaokrąglona wysokość: ${data.zaokraglona_wysokosc} cm`;
+                }
+            } catch (error) {
+                alert("Wystąpił błąd podczas pobierania danych: " + error.message);
+            }
         }
     </script>
 </head>
@@ -35,33 +52,20 @@
             <a href="/static/fauxwood_50.html">Faux Wood (PVC) 50MM</a>
         </div>
 
-        <!-- Kategoria "Żaluzje Aluminium" -->
-        <div class="category" onclick="toggleSubmenu('aluminium')">Żaluzje Aluminium</div>
-        <div id="aluminium" class="subcategory">
-            <a href="/static/alu_16_a.html">16MM Grupa A</a>
-            <a href="/static/alu_16_b.html">16MM Grupa B</a>
-            <a href="/static/alu_25_a.html">25MM Grupa A</a>
-            <a href="/static/alu_25_b.html">25MM Grupa B</a>
-            <a href="/static/alu_25_c.html">25MM Grupa C</a>
-            <a href="/static/alu_25_d.html">25MM Grupa D</a>
-            <a href="/static/alu_25_e.html">25MM Grupa E</a>
-            <a href="/static/alu_50_a.html">50MM Grupa A</a>
-            <a href="/static/alu_50_b.html">50MM Grupa B</a>
-            <a href="/static/alu_50_c.html">50MM Grupa C</a>
-            <a href="/static/alu_50_d.html">50MM Grupa D</a>
-            <a href="/static/alu_50_ae.html">50MM Grupa AE</a>
-            <a href="/static/alu_50_be.html">50MM Grupa BE</a>
+        <!-- Formularz do wprowadzania wymiarów -->
+        <div>
+            <label for="width">Szerokość (cm):</label>
+            <input type="number" id="width" name="width" required>
+            <label for="height">Wysokość (cm):</label>
+            <input type="number" id="height" name="height" required>
+            <button onclick="calculatePrice()">Sprawdź cenę</button>
         </div>
 
-        <!-- Kategoria "Moskitiery" -->
-        <div class="category" onclick="toggleSubmenu('moskitiery')">Moskitiery</div>
-        <div id="moskitiery" class="subcategory">
-            <a href="/static/moskitiery_ramkowe_podstawowe.html">Ramkowe Kolory Podstawowe</a>
-            <a href="/static/moskitiery_ramkowe_premium.html">Ramkowe Kolory Premium</a>
-            <a href="/static/moskitiery_drzwiowe_podstawowe.html">Drzwiowe Kolory Podstawowe</a>
-            <a href="/static/moskitiery_drzwiowe_premium.html">Drzwiowe Kolory Premium</a>
-            <a href="/static/moskitiery_rolowane_biale.html">Rolowane Białe</a>
-            <a href="/static/moskitiery_rolowane_kolory.html">Rolowane Inne Kolory</a>
+        <!-- Wyniki kalkulacji -->
+        <div>
+            <p id="price">Cena: </p>
+            <p id="roundedWidth">Zaokrąglona szerokość: </p>
+            <p id="roundedHeight">Zaokrąglona wysokość: </p>
         </div>
     </div>
 </body>

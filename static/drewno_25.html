@@ -38,7 +38,8 @@
                 return;
             }
 
-            fetch(`http://127.0.0.1:8000/cena/?category=${category}&szerokosc=${width}&wysokosc=${height}`)
+            // Użycie pełnego URL do serwera na Render
+            fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&szerokosc=${width}&wysokosc=${height}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
