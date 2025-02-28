@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Żaluzje Drewniane 50MM</title>
+    <title>Żaluzje Drewno 50MM</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Żaluzje Drewniane 50MM</h1>
+        <h1>Żaluzje Drewno 50MM</h1>
         <nav>
             <a href="index.html">Strona Główna</a>
         </nav>
@@ -105,12 +105,14 @@
                 karniszOptions.push(karnisz);
             }
 
-            const url = `http://127.0.0.1:8000/cena/?category=${category}` +
+            // Zaktualizowany URL do Twojego backendu na Renderze
+            const url = `https://kalkulator-zaluzji.onrender.com/cena/?category=${category}` +
                         widths.map((w, i) => `&szerokosci=${w}`).join('') + 
                         heights.map((h, i) => `&wysokosci=${h}`).join('') + 
                         zybkaOptions.map((z, i) => `&zybka${i + 1}=${z}`).join('') + 
                         karniszOptions.map((k, i) => `&karnisz${i + 1}=${k}`).join('');
 
+            // Wysyłamy zapytanie do backendu
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -141,4 +143,3 @@
     </script>
 </body>
 </html>
-

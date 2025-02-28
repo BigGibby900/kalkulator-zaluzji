@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Żaluzje - Kalkulator Cen</title>
+    <title>Żaluzje Laminat 25MM</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1 id="product-name">Żaluzje Laminatowe 25MM</h1>
+        <h1>Żaluzje Laminat 25MM</h1>
         <nav>
             <a href="index.html">Strona Główna</a>
         </nav>
@@ -50,7 +50,6 @@
     <script>
         let counter = 1;
 
-        // Funkcja do dodawania kolejnej pary wymiarów z opcjami
         function addInputs() {
             counter++;
             const container = document.getElementById("inputs-container");
@@ -80,15 +79,13 @@
             container.appendChild(newPair);
         }
 
-        // Funkcja do obliczania cen
         function calculatePrice() {
-            const category = "laminat_25";  // Kategoria będzie dynamicznie ustawiana w zależności od podstrony
+            const category = "laminat_25";  // Kategoria dla Laminat 25MM
             let widths = [];
             let heights = [];
             let zybkaOptions = [];
             let karniszOptions = [];
 
-            // Zbieramy wszystkie wartości szerokości, wysokości, prowadzenia żyłki i karnisza
             for (let i = 1; i <= counter; i++) {
                 const width = document.getElementById(`width${i}`).value;
                 const height = document.getElementById(`height${i}`).value;
@@ -108,8 +105,8 @@
                 karniszOptions.push(karnisz);
             }
 
-            // Budujemy zapytanie z parametrami
-            const url = `http://127.0.0.1:8000/cena/?category=${category}` +
+            // Zaktualizowany URL do Twojego backendu na Renderze
+            const url = `https://kalkulator-zaluzji.onrender.com/cena/?category=${category}` +
                         widths.map((w, i) => `&szerokosci=${w}`).join('') + 
                         heights.map((h, i) => `&wysokosci=${h}`).join('') + 
                         zybkaOptions.map((z, i) => `&zybka${i + 1}=${z}`).join('') + 
@@ -125,7 +122,6 @@
                         let totalPrice = 0;
                         let resultText = "Ceny:\n";
 
-                        // Sumujemy ceny
                         data.results.forEach(item => {
                             if (item.error) {
                                 resultText += `Błąd dla wymiarów ${item.szerokosc}x${item.wysokosc}: ${item.error}\n`;

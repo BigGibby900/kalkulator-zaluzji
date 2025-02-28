@@ -80,7 +80,7 @@
         }
 
         function calculatePrice() {
-            const category = "laminat_50";  // Kategoria dla Laminat 50MM
+            const category = "laminat_50";  // Zmieniona kategoria na Laminat 50MM
             let widths = [];
             let heights = [];
             let zybkaOptions = [];
@@ -105,12 +105,14 @@
                 karniszOptions.push(karnisz);
             }
 
-            const url = `http://127.0.0.1:8000/cena/?category=${category}` +
+            // Zaktualizowany URL do backendu
+            const url = `https://kalkulator-zaluzji.onrender.com/cena/?category=${category}` +
                         widths.map((w, i) => `&szerokosci=${w}`).join('') + 
                         heights.map((h, i) => `&wysokosci=${h}`).join('') + 
                         zybkaOptions.map((z, i) => `&zybka${i + 1}=${z}`).join('') + 
                         karniszOptions.map((k, i) => `&karnisz${i + 1}=${k}`).join('');
 
+            // Wysyłanie zapytania do backendu
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
