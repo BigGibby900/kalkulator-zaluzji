@@ -80,7 +80,7 @@
         }
 
         function calculatePrice() {
-            const category = "laminat_25";  // Kategoria dla Laminat 25MM
+            const category = "laminat_25";  // Zmieniona kategoria na Laminat 25MM
             let widths = [];
             let heights = [];
             let zybkaOptions = [];
@@ -105,14 +105,14 @@
                 karniszOptions.push(karnisz);
             }
 
-            // Zaktualizowany URL do Twojego backendu na Renderze
+            // Zaktualizowany URL do backendu
             const url = `https://kalkulator-zaluzji.onrender.com/cena/?category=${category}` +
                         widths.map((w, i) => `&szerokosci=${w}`).join('') + 
                         heights.map((h, i) => `&wysokosci=${h}`).join('') + 
                         zybkaOptions.map((z, i) => `&zybka${i + 1}=${z}`).join('') + 
                         karniszOptions.map((k, i) => `&karnisz${i + 1}=${k}`).join('');
 
-            // Wysyłamy zapytanie do backendu
+            // Wysyłanie zapytania do backendu
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
