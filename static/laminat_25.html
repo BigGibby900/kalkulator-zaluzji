@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Żaluzje Drewniane 25MM</title>
+    <title>Żaluzje - Kalkulator Cen</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Żaluzje Drewniane 25MM</h1>
+        <h1 id="product-name">Żaluzje Laminatowe 25MM</h1>
         <nav>
             <a href="index.html">Strona Główna</a>
         </nav>
@@ -82,7 +82,7 @@
 
         // Funkcja do obliczania cen
         function calculatePrice() {
-            const category = "drewno_25";  // Kategoria dla Drewno 25MM
+            const category = "laminat_25";  // Kategoria będzie dynamicznie ustawiana w zależności od podstrony
             let widths = [];
             let heights = [];
             let zybkaOptions = [];
