@@ -1,0 +1,112 @@
+/* Ogólne style dla strony */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    background: #ddd;
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin: 0;
+    color: #222;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #555;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background: #e0e0e0;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    background: #bbb;
+}
+
+/* Główna sekcja */
+main {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 90%;
+    max-width: 600px;
+}
+
+h2 {
+    text-align: center;
+    color: #444;
+}
+
+/* Formularz kalkulatora */
+#inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-pair {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+input, select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #777;
+    color: white;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #555;
+}
+
+/* Wynik kalkulacji */
+#result {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e8e8e8;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}

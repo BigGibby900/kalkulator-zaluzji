@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Żaluzje Drewniane 25MM</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="calculator.css">
 </head>
 <body>
     <header>
@@ -110,7 +110,8 @@
                 karnisz.push(parseInt(karniszVal));
             }
 
-            fetch(`http://localhost:8000/cena/?category=${category}&` +
+            fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&` +
+
                 new URLSearchParams({ szerokosci, wysokosci, ilosci, zybka, karnisz }))
                 .then(response => response.json())
                 .then(data => {
@@ -125,7 +126,7 @@
                                 resultText += `Błąd dla wymiarów ${item.szerokosc}x${item.wysokosc}: ${item.error}\n`;
                             } else {
                                 const itemTotal = item.cena;
-                                resultText += `Cena dla ${item.szerokosc}x${item.wysokosc} (${item.ilosc} szt.): ${itemTotal} zł (zaokrąglone do: ${item.zaokraglona_szerokosc}x${item.zaokraglona_wysokosc})\n`;
+                                resultText += `Cena dla ${item.szerokosc}x${item.wysokosc} (${item.ilosc} szt.): ${itemTotal} zł\n`;
                                 totalPrice += itemTotal;
                             }
                         });
