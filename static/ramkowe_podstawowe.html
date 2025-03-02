@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moskitiery ramkowe kolory podstawowe</title>
+    <link rel="stylesheet" href="calculator.css">
+</head>
+<body>
+    <header>
+        <h1>Moskitiery ramkowe kolory podstawowe</h1>
+        <nav>
+            <a href="index.html">Strona Główna</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Kalkulator cen</h2>
+
+        <div id="inputs-container">
+            <div class="input-pair">
+                <label for="width1">Szerokość (cm):</label>
+                <input type="number" id="width1" placeholder="Wpisz szerokość" required>
+
+                <label for="height1">Wysokość (cm):</label>
+                <input type="number" id="height1" placeholder="Wpisz wysokość" required>
+
+                <label for="ilosc1">Ilość:</label>
+                <input type="number" id="ilosc1" value="1" min="1" required>
+            </div>
+        </div>
+
+        <button onclick="addInputs()">Dodaj kolejną parę wymiarów</button>
+        <button onclick="calculatePrice()">Sprawdź ceny</button>
+        
+        <p id="result"></p>
+    </main>
+
+    <script>
+        let counter = 1;
+
+        function addInputs() {
+            counter++;
+            const container = document.getElementById("inputs-container");
+            const newPair = document.createElement("div");
+            newPair.classList.add("input-pair");
+            newPair.innerHTML = `
+                <label for="width${counter}">Szerokość (cm):</label>
+                <input type="number" id="width${counter}" placeholder="Wpisz szerokość" required>
+
+                <label for="height${counter}">Wysokość (cm):</label>
+                <input type="number" id="height${counter}" placeholder="Wpisz wysokość" required>
+
+                <label for="zybka${counter}">Prowadzenie żyłki:</label>
+                <select id="zybka${counter}">
+                    <option value="0">Brak (0 zł)</option>
+                    <option value="25">Prowadzenie żyłki 25 (35 zł)</option>
+                    <option value="50">Prowadzenie żyłki 50 (50 zł)</option>
+                </select>
+
+                <label for="karnisz${counter}">Karnisz:</label>
+                <select id="karnisz${counter}">
+                    <option value="0">Nie (0 zł)</option>
+                    <option value="30">Tak (30 zł)</option>
+                </select>
+
+                <label for="ilosc${counter}">Ilość:</label>
+                <input type="number" id="ilosc${counter}" value="1" min="1" required>
+            `;
+            container.appendChild(newPair);
+        }
+
+        function calculatePrice() {
+            const category = "ramkowe_podstawowe";
+            const szerokosci = [];
+            const wysokosci = [];
+            const ilosci = [];
+
+            for (let i = 1; i <= counter; i++) {
+                const width = document.getElementById(`width${i}`).value;
+                const height = document.getElementById(`height${i}`).value;
+                const ilosc = document.getElementById(`ilosc${i}`).value;
+
+                if (!width || !height || !ilosc) {
+                    document.getElementById("result").innerText = "Wprowadź wszystkie dane!";
+                    return;
+                }
+
+                szerokosci.push(parseInt(width));
+                wysokosci.push(parseInt(height));
+                ilosci.push(parseInt(ilosc));
+               
+            }
+
+            fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&` +
+                new URLSearchParams({ szerokosci, wysokosci, ilosci }))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("result").innerText = "Błąd: " + data.error;
+                    } else {
+                        let totalPrice = 0;
+                        let resultText = "Ceny:\n";
+
+                        data.results.forEach(item => {
+                            if (item.error) {
+                                resultText += `Błąd dla wymiarów ${item.szerokosc}x${item.wysokosc}: ${item.error}\n`;
+                            } else {
+                                const itemTotal = item.cena;
+                                resultText += `Cena dla ${item.szerokosc}x${item.wysokosc} (${item.ilosc} szt.): ${itemTotal} zł\n`;
+                                totalPrice += itemTotal;
+                            }
+                        });
+
+                        resultText += `\nŁączna cena: ${totalPrice} zł`;
+                        document.getElementById("result").innerText = resultText;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("result").innerText = "Błąd połączenia z serwerem.";
+                    console.error("Błąd pobierania danych:", error);
+                });
+        }
+    </script>
+</body>
+</html>
