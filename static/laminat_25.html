@@ -37,11 +37,13 @@
                     <option value="0">Nie (0 zł)</option>
                     <option value="30">Tak (30 zł)</option>
                 </select>
+
+                <label for="ilosc1">Ilość:</label>
+                <input type="number" id="ilosc1" value="1" min="1" required>
             </div>
         </div>
 
         <button onclick="addInputs()">Dodaj kolejną parę wymiarów</button>
-
         <button onclick="calculatePrice()">Sprawdź ceny</button>
         
         <p id="result"></p>
@@ -53,7 +55,6 @@
         function addInputs() {
             counter++;
             const container = document.getElementById("inputs-container");
-
             const newPair = document.createElement("div");
             newPair.classList.add("input-pair");
             newPair.innerHTML = `
@@ -75,45 +76,42 @@
                     <option value="0">Nie (0 zł)</option>
                     <option value="30">Tak (30 zł)</option>
                 </select>
+
+                <label for="ilosc${counter}">Ilość:</label>
+                <input type="number" id="ilosc${counter}" value="1" min="1" required>
             `;
             container.appendChild(newPair);
         }
 
         function calculatePrice() {
-            const category = "laminat_25";  // Zmieniona kategoria na Laminat 25MM
-            let widths = [];
-            let heights = [];
-            let zybkaOptions = [];
-            let karniszOptions = [];
+            const category = "laminat_25";
+            const szerokosci = [];
+            const wysokosci = [];
+            const ilosci = [];
+            const zybka = [];
+            const karnisz = [];
 
             for (let i = 1; i <= counter; i++) {
                 const width = document.getElementById(`width${i}`).value;
                 const height = document.getElementById(`height${i}`).value;
+                const ilosc = document.getElementById(`ilosc${i}`).value;
+                const zybkaVal = document.getElementById(`zybka${i}`).value;
+                const karniszVal = document.getElementById(`karnisz${i}`).value;
 
-                if (!width || !height) {
-                    document.getElementById("result").innerText = "Wprowadź wszystkie szerokości i wysokości!";
+                if (!width || !height || !ilosc) {
+                    document.getElementById("result").innerText = "Wprowadź wszystkie dane!";
                     return;
                 }
 
-                widths.push(width);
-                heights.push(height);
-
-                const prowadzenieZylki = document.getElementById(`zybka${i}`).value;
-                const karnisz = document.getElementById(`karnisz${i}`).value;
-
-                zybkaOptions.push(prowadzenieZylki);
-                karniszOptions.push(karnisz);
+                szerokosci.push(parseInt(width));
+                wysokosci.push(parseInt(height));
+                ilosci.push(parseInt(ilosc));
+                zybka.push(parseInt(zybkaVal));
+                karnisz.push(parseInt(karniszVal));
             }
 
-            // Zaktualizowany URL do backendu
-            const url = `https://kalkulator-zaluzji.onrender.com/cena/?category=${category}` +
-                        widths.map((w, i) => `&szerokosci=${w}`).join('') + 
-                        heights.map((h, i) => `&wysokosci=${h}`).join('') + 
-                        zybkaOptions.map((z, i) => `&zybka${i + 1}=${z}`).join('') + 
-                        karniszOptions.map((k, i) => `&karnisz${i + 1}=${k}`).join('');
-
-            // Wysyłanie zapytania do backendu
-            fetch(url)
+            fetch(`http://localhost:8000/cena/?category=${category}&` +
+                new URLSearchParams({ szerokosci, wysokosci, ilosci, zybka, karnisz }))
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -126,8 +124,9 @@
                             if (item.error) {
                                 resultText += `Błąd dla wymiarów ${item.szerokosc}x${item.wysokosc}: ${item.error}\n`;
                             } else {
-                                resultText += `Cena dla ${item.szerokosc}x${item.wysokosc}: ${item.cena} zł (zaokrąglone do: ${item.zaokraglona_szerokosc}x${item.zaokraglona_wysokosc})\n`;
-                                totalPrice += item.cena;
+                                const itemTotal = item.cena;
+                                resultText += `Cena dla ${item.szerokosc}x${item.wysokosc} (${item.ilosc} szt.): ${itemTotal} zł (zaokrąglone do: ${item.zaokraglona_szerokosc}x${item.zaokraglona_wysokosc})\n`;
+                                totalPrice += itemTotal;
                             }
                         });
 
