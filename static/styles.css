@@ -46,3 +46,16 @@ body {
     border-radius: 5px;
 }
 
+.category a {
+    text-decoration: none; /* Usuwa domyślne podkreślenie linka */
+    color: inherit; /* Link będzie miał ten sam kolor co reszta kategorii */
+    display: block; /* Cały blok kategorii będzie klikalny */
+    padding: 15px; /* Dopasowanie do innych kategorii */
+    font-weight: bold;
+}
+
+.category a:hover {
+    color: inherit; /* Zapobiega zmianie koloru na niebieski */
+    background-color: #b5b5b5; /* Taki sam efekt hover jak inne kategorie */
+    transform: scale(1.05); /* Subtelne powiększenie */
+}
