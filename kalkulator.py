@@ -29,7 +29,7 @@ def round_up(value, step=10):
     return math.ceil(value / step) * step
 
 
-def get_price(category: str, width: int, height: int, zybka: int, karnisz: int, quantity: int):
+def get_price(category: str, width: int, height: int, zybka: int, karnisz: int, drabinka: bool, quantity: int):
     file_path = f"cenniki/{category}.xlsx"
 
     if not os.path.exists(file_path):
@@ -57,11 +57,14 @@ def get_price(category: str, width: int, height: int, zybka: int, karnisz: int, 
         return None, None, None, "Podane wymiary są zbyt duże – brak w ofercie."
 
     try:
-        price = df.at[nearest_height, nearest_width]
+        base_price = df.at[nearest_height, nearest_width]
     except KeyError:
         return None, None, None, "Brak ceny dla podanych wymiarów."
 
-    total_price = (price + (35 if zybka == 25 else 50 if zybka == 50 else 0) + (30 if karnisz == 30 else 0)) * quantity
+    if drabinka:
+        base_price *= 1.05  # Dodanie 5% do ceny bazowej
+
+    total_price = (base_price + (35 if zybka == 25 else 50 if zybka == 50 else 0) + (30 if karnisz == 30 else 0)) * quantity
     return round(total_price), nearest_width, nearest_height, None
 
 
@@ -73,6 +76,7 @@ def get_cena(
     ilosci: str = Query(...),
     zybka: str = Query("0"),
     karnisz: str = Query("0"),
+    drabinka: str = Query("0"),  # 0 = brak, 1 = drabinka taśmowa
 ):
     try:
         szerokosci = list(map(int, szerokosci.split(",")))
@@ -80,6 +84,7 @@ def get_cena(
         ilosci = list(map(int, ilosci.split(",")))
         zybka = list(map(int, zybka.split(","))) if zybka else [0] * len(szerokosci)
         karnisz = list(map(int, karnisz.split(","))) if karnisz else [0] * len(szerokosci)
+        drabinka = list(map(int, drabinka.split(","))) if drabinka else [0] * len(szerokosci)
     except ValueError:
         return {"error": "Niepoprawny format danych - wartości powinny być liczbami oddzielonymi przecinkami"}
 
@@ -94,6 +99,7 @@ def get_cena(
             wysokosci[i],
             zybka[i] if i < len(zybka) else 0,
             karnisz[i] if i < len(karnisz) else 0,
+            bool(drabinka[i]) if i < len(drabinka) else False,
             ilosci[i]
         )
 

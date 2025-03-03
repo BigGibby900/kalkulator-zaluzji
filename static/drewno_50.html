@@ -36,6 +36,9 @@
                     <option value="0">Nie (0 zł)</option>
                     <option value="30">Tak (30 zł)</option>
                 </select>
+                
+                <label for="drabinka1">Drabinka taśmowa:</label>
+                <input type="checkbox" id="drabinka1">
 
                 <label for="ilosc1">Ilość:</label>
                 <input type="number" id="ilosc1" value="1" min="1" required>
@@ -66,7 +69,6 @@
                 <label for="zybka${counter}">Prowadzenie żyłki:</label>
                 <select id="zybka${counter}">
                     <option value="0">Brak (0 zł)</option>
-                    <option value="25">Prowadzenie żyłki 25 (35 zł)</option>
                     <option value="50">Prowadzenie żyłki 50 (50 zł)</option>
                 </select>
 
@@ -75,6 +77,9 @@
                     <option value="0">Nie (0 zł)</option>
                     <option value="30">Tak (30 zł)</option>
                 </select>
+                
+                <label for="drabinka${counter}">Drabinka taśmowa:</label>
+                <input type="checkbox" id="drabinka${counter}">
 
                 <label for="ilosc${counter}">Ilość:</label>
                 <input type="number" id="ilosc${counter}" value="1" min="1" required>
@@ -89,6 +94,7 @@
             const ilosci = [];
             const zybka = [];
             const karnisz = [];
+            const drabinka = [];
 
             for (let i = 1; i <= counter; i++) {
                 const width = document.getElementById(`width${i}`).value;
@@ -96,6 +102,7 @@
                 const ilosc = document.getElementById(`ilosc${i}`).value;
                 const zybkaVal = document.getElementById(`zybka${i}`).value;
                 const karniszVal = document.getElementById(`karnisz${i}`).value;
+                const drabinkaVal = document.getElementById(`drabinka${i}`).checked ? 1 : 0;
 
                 if (!width || !height || !ilosc) {
                     document.getElementById("result").innerText = "Wprowadź wszystkie dane!";
@@ -107,10 +114,11 @@
                 ilosci.push(parseInt(ilosc));
                 zybka.push(parseInt(zybkaVal));
                 karnisz.push(parseInt(karniszVal));
+                drabinka.push(drabinkaVal);
             }
 
             fetch(`https://kalkulator-zaluzji.onrender.com/cena/?category=${category}&` +
-                new URLSearchParams({ szerokosci, wysokosci, ilosci, zybka, karnisz }))
+                new URLSearchParams({ szerokosci, wysokosci, ilosci, zybka, karnisz, drabinka }))
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
