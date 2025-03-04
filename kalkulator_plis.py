@@ -27,11 +27,12 @@ def get_price(system: str, width: int, height: int, material: str, width2: int =
     try:
         xls = pd.ExcelFile(file_path)
         
-        # Zmieniono z 'System X' na 'System_X'
-        if f"System_{system}" not in xls.sheet_names:
-            return None, "Brak cennika dla wybranego systemu."
+        # Dostosowano do nazw systemów w formacie 'System_X'
+        system_name = f"System_{system}"
+        if system_name not in xls.sheet_names:
+            return None, f"Brak cennika dla wybranego systemu: {system_name}"
         
-        df = xls.parse(f"System_{system}", index_col=0).dropna(how="all")
+        df = xls.parse(system_name, index_col=0).dropna(how="all")
         df.columns = pd.to_numeric(df.columns, errors="coerce")
         df.index = pd.to_numeric(df.index, errors="coerce")
         df = df.dropna().astype(float)
