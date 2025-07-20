@@ -96,7 +96,7 @@
     const system = document.getElementById("system").value;
     const width = document.getElementById("width").value;
     const height = document.getElementById("height").value;
-    const material = document.getElementById("material").value;
+    const material = document.getElementById("material").value.trim();
     const width2 = document.getElementById("width2").value || null;
 
     if (!width || !height || !material) {
@@ -115,16 +115,18 @@
         console.log("Wysyłam zapytanie:", url.toString());
         const response = await fetch(url);
         const data = await response.json();
+        console.log("ODPOWIEDŹ:", data); // ← Debug: pokaże JSON w konsoli
 
         if (response.ok && typeof data.cena !== "undefined") {
             document.getElementById("result").innerText = `Cena: ${data.cena} zł`;
         } else {
-            document.getElementById("result").innerText = `Błąd: ${data.error || "Brak odpowiedzi z serwera."}`;
+            document.getElementById("result").innerText = `Błąd: ${data.error || "Brak ceny w odpowiedzi."}`;
         }
     } catch (error) {
         document.getElementById("result").innerText = "Błąd połączenia z serwerem.";
     }
 }
+
 
     </script>
     
