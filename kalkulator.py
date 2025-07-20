@@ -113,10 +113,11 @@ def get_price_plis(system: str, width: int, height: int, material: str, width2: 
         df.columns = pd.to_numeric(df.columns, errors="coerce")
         df.index = pd.to_numeric(df.index, errors="coerce")
         df = df.dropna().astype(float)
-        materials_df = xls.parse("Material", header=0)
-        materials_df.set_index(materials_df.columns[0], inplace=True)
-        materials_df.columns = ["Cena"]
+        materials_df = xls.parse("Material", header=None)
+        materials_df.columns = ["Material", "Cena"]
+        materials_df.set_index("Material", inplace=True)
         materials_df["Cena"] = materials_df["Cena"].astype(str).str.replace(",", ".").astype(float)
+
     except Exception as e:
         return None, f"Błąd wczytywania pliku: {str(e)}"
 
@@ -158,9 +159,11 @@ def get_materialy_plisy():
         return JSONResponse(content={"error": "Brak pliku z cennikami."}, status_code=404)
     try:
         xls = pd.ExcelFile(file_path)
-        df = xls.parse("Material", header=0)
-        df.set_index(df.columns[0], inplace=True)
+        df = xls.parse("Material", header=None)
+        df.columns = ["Material", "Cena"]
+        df.set_index("Material", inplace=True)
         return JSONResponse(content={"materialy": df.index.tolist()}, status_code=200)
+
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
