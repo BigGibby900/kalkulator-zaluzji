@@ -57,9 +57,7 @@
             <div class="input-group">
                 <label for="material">Materiał:</label>
                 <input type="text" id="material" list="material-list" required>
-                <datalist id="material-list">
-                    <!-- dynamicznie wypełniana -->
-                </datalist>
+                <datalist id="material-list"></datalist>
             </div>
 
             <button onclick="calculatePrice()">Oblicz cenę</button>
@@ -69,18 +67,14 @@
     </main>
 
     <script>
-        const API_URL = window.location.hostname === "localhost"
-            ? "http://127.0.0.1:8000"
-            : "https://kalkulator-zaluzji.onrender.com"; // Zmień na właściwy adres
+        const API_URL = "https://kalkulator-zaluzji.onrender.com";
 
-        // Pokazywanie drugiej szerokości dla wybranych systemów
         document.getElementById("system").addEventListener("change", function () {
             const system = this.value;
             const width2Group = document.getElementById("width2-group");
             width2Group.style.display = (system === "9_10" || system === "13") ? "block" : "none";
         });
 
-        // Pobieranie listy materiałów z backendu
         window.addEventListener("DOMContentLoaded", async () => {
             try {
                 const response = await fetch(`${API_URL}/materialy/`);
@@ -98,7 +92,6 @@
             }
         });
 
-        // Obliczanie ceny
         async function calculatePrice() {
             const system = document.getElementById("system").value;
             const width = document.getElementById("width").value;
@@ -119,6 +112,7 @@
             if (width2) url.searchParams.append("szerokosc2", width2);
 
             try {
+                console.log("Wysyłam zapytanie:", url.toString());
                 const response = await fetch(url);
                 const data = await response.json();
 
