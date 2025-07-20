@@ -68,16 +68,16 @@
 
     <script>
         const API_URL = "https://kalkulator-zaluzji.onrender.com";
-
+    
         document.getElementById("system").addEventListener("change", function () {
             const system = this.value;
             const width2Group = document.getElementById("width2-group");
             width2Group.style.display = (system === "9_10" || system === "13") ? "block" : "none";
         });
-
+    
         window.addEventListener("DOMContentLoaded", async () => {
             try {
-                const response = await fetch(`${API_URL}/materialy/`);
+                const response = await fetch(`${API_URL}/materialy/plisy`);
                 const data = await response.json();
                 if (data.materialy) {
                     const datalist = document.getElementById("material-list");
@@ -91,31 +91,31 @@
                 console.error("Błąd ładowania materiałów:", error);
             }
         });
-
+    
         async function calculatePrice() {
             const system = document.getElementById("system").value;
             const width = document.getElementById("width").value;
             const height = document.getElementById("height").value;
             const material = document.getElementById("material").value;
             const width2 = document.getElementById("width2").value || null;
-
+    
             if (!width || !height || !material) {
                 document.getElementById("result").innerText = "Wprowadź wszystkie dane!";
                 return;
             }
-
-            const url = new URL(`${API_URL}/cena/`);
+    
+            const url = new URL(`${API_URL}/cena/plisy`);
             url.searchParams.append("system", system);
             url.searchParams.append("szerokosc", width);
             url.searchParams.append("wysokosc", height);
             url.searchParams.append("material", material);
             if (width2) url.searchParams.append("szerokosc2", width2);
-
+    
             try {
                 console.log("Wysyłam zapytanie:", url.toString());
                 const response = await fetch(url);
                 const data = await response.json();
-
+    
                 if (!response.ok || data.error) {
                     document.getElementById("result").innerText = `Błąd: ${data.error || "Nieznany błąd serwera."}`;
                 } else {
@@ -126,5 +126,6 @@
             }
         }
     </script>
+    
 </body>
 </html>
