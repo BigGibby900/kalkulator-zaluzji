@@ -109,10 +109,13 @@ def get_price_plis(system: str, width: int, height: int, material: str, width2: 
         system_name = f"System_{system}"
         if system_name not in xls.sheet_names:
             return None, f"Brak cennika dla systemu: {system_name}"
+
+        # Wczytaj system (np. System_1)
         df = xls.parse(system_name, index_col=0).dropna(how="all")
         df.columns = pd.to_numeric(df.columns, errors="coerce")
-        df.index = pd.to_numeric(df.index, errors="coerce")
-        df = df.dropna().astype(float)
+        df = df.astype(float)
+
+        # Wczytaj materiały
         materials_df = xls.parse("Material", header=None)
         materials_df.columns = ["Material", "Cena"]
         materials_df.set_index("Material", inplace=True)
@@ -124,24 +127,30 @@ def get_price_plis(system: str, width: int, height: int, material: str, width2: 
     material = material.strip().upper()
     if material not in materials_df.index:
         return None, "Nie znaleziono wybranego materiału."
+
     material_price = materials_df.at[material, "Cena"]
     rounded_width = round_up(width, 10)
-    rounded_height = round_up(height, 10)
+
     available_widths = sorted(df.columns)
-    available_heights = sorted(df.index)
     nearest_width = next((w for w in available_widths if w >= rounded_width), None)
-    nearest_height = next((h for h in available_heights if h >= rounded_height), None)
-    if nearest_width is None or nearest_height is None:
-        return None, "Podane wymiary są zbyt duże – brak w ofercie."
-    base_price = df.at[nearest_height, nearest_width]
+    if nearest_width is None:
+        return None, "Podana szerokość jest zbyt duża – brak w ofercie."
+
+    # Cena systemu z pierwszego wiersza
+    base_price = df.iloc[0, df.columns.get_loc(nearest_width)]
+
     if width2:
         rounded_width2 = round_up(width2, 10)
         nearest_width2 = next((w for w in available_widths if w >= rounded_width2), None)
         if nearest_width2:
-            base_price += df.at[nearest_height, nearest_width2]
-    area = (max(width, width2) / 100) * (height / 100)
+            base_price += df.iloc[0, df.columns.get_loc(nearest_width2)]
+
+    area = (max(width, width2 or 0) / 100) * (height / 100)
     total_price = round(base_price + (area * material_price))
+
     return total_price, None
+
+
 
 @app.get("/cena/plisy")
 def get_cena_plisy(system: str, szerokosc: int, wysokosc: int, material: str, szerokosc2: int = Query(None)):
