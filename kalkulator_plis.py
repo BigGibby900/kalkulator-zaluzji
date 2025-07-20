@@ -41,7 +41,11 @@ def get_price(system: str, width: int, height: int, material: str, width2: int =
         df = df.dropna().astype(float)
         
         # Wczytanie cennika materiałów
-        materials_df = xls.parse("materialy", index_col=0).dropna()
+        materials_df = xls.parse("Material", header=0)
+        materials_df.set_index(materials_df.columns[0], inplace=True)
+        materials_df.columns = ["Cena"]
+        materials_df["Cena"] = materials_df["Cena"].astype(str).str.replace(",", ".").astype(float)
+
     except Exception as e:
         return None, f"Błąd wczytywania pliku: {str(e)}"
     
@@ -94,3 +98,18 @@ def get_cena(system: str, szerokosc: int, wysokosc: int, material: str, szerokos
         return JSONResponse(content={"error": error}, status_code=400)
     
     return JSONResponse(content={"cena": total_price}, status_code=200)
+    
+@app.get("/materialy/")
+def get_materialy():
+    file_path = "cenniki/cenniki_plis.xlsx"
+    if not os.path.exists(file_path):
+        return JSONResponse(content={"error": "Brak pliku z cennikami."}, status_code=404)
+
+    try:
+        xls = pd.ExcelFile(file_path)
+        df = xls.parse("Material", header=0)
+        df.set_index(df.columns[0], inplace=True)
+        material_names = df.index.tolist()
+        return JSONResponse(content={"materialy": material_names}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
