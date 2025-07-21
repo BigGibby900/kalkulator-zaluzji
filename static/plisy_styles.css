@@ -1,45 +1,37 @@
-/* Ogólne style dla strony */
+/* Ogólne style */
 body {
     font-family: Arial, sans-serif;
     background: #f4f4f4;
     color: #333;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+/* Nagłówek */
 header {
-    background: #ddd;
-    padding: 15px;
+    background: #333;
+    padding: 20px;
     width: 100%;
     text-align: center;
+    color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    margin: 0;
-    color: #222;
-}
-
-/* Główna sekcja */
+/* Sekcja główna */
 main {
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
+    margin-top: 30px;
 }
 
-h2 {
-    text-align: center;
-    color: #444;
-}
-
-/* Formularz kalkulatora */
+/* Formularz wejściowy */
 #inputs-container {
     display: flex;
     flex-direction: column;
@@ -47,10 +39,6 @@ h2 {
 }
 
 .input-group {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -67,32 +55,62 @@ input, select {
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* Przycisk */
 button {
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 12px;
     font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    background: #777;
+    background: #007acc;
     color: white;
-    transition: 0.3s;
-    width: 100%;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background: #555;
+    background: #005fa3;
 }
 
-/* Wynik kalkulacji */
-#result {
-    margin-top: 15px;
+/* Tabela podsumowania */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #007acc;
+    color: white;
     padding: 10px;
-    background: #e8e8e8;
-    border-radius: 5px;
+    font-weight: bold;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Wynik końcowy */
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e6f7ff;
+    border: 1px solid #b3e0ff;
+    border-radius: 6px;
     font-weight: bold;
     text-align: center;
+    font-size: 1.2em;
 }
