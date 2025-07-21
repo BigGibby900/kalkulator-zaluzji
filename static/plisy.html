@@ -1,136 +1,126 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Plis</title>
-    <link rel="stylesheet" href="plisy_styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Plis</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select, button { margin: 5px; padding: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    #result { font-weight: bold; margin-top: 20px; font-size: 1.2em; }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Kalkulator Plis</h1>
-    </header>
-    
-    <main>
-        <h2>Oblicz cenę</h2>
-        <div id="inputs-container">
-            <div class="input-group">
-                <label for="system">System:</label>
-                <select id="system">
-                    <option value="1">System_1</option>
-                    <option value="2">System_2</option>
-                    <option value="3">System_3</option>
-                    <option value="4">System_4</option>
-                    <option value="4a">System_4a</option>
-                    <option value="5">System_5</option>
-                    <option value="6_6a">System_6_6a</option>
-                    <option value="7">System_7</option>
-                    <option value="8_8a">System_8_8a</option>
-                    <option value="9_10">System_9_10</option>
-                    <option value="11">System_11</option>
-                    <option value="12">System_12</option>
-                    <option value="13">System_13</option>
-                    <option value="14">System_14</option>
-                    <option value="14a">System_14a</option>
-                    <option value="15">System_15</option>
-                    <option value="15a">System_15a</option>
-                    <option value="16">System_16</option>
-                    <option value="E">System_E</option>
-                </select>
-            </div>
+  <h1>Kalkulator Plis</h1>
 
-            <div class="input-group">
-                <label for="width">Szerokość (cm):</label>
-                <input type="number" id="width" required>
-            </div>
+  <label for="system">System:</label>
+  <select id="system">
+    <option value="1">System_1</option>
+    <option value="2">System_2</option>
+    <option value="3">System_3</option>
+    <!-- Dodaj więcej systemów w razie potrzeby -->
+  </select><br />
 
-            <div class="input-group" id="width2-group" style="display: none;">
-                <label for="width2">Druga szerokość (cm):</label>
-                <input type="number" id="width2">
-            </div>
+  <label for="width">Szerokość (cm):</label>
+  <input type="number" id="width" /><br />
 
-            <div class="input-group">
-                <label for="height">Wysokość (cm):</label>
-                <input type="number" id="height" required>
-            </div>
+  <label for="height">Wysokość (cm):</label>
+  <input type="number" id="height" /><br />
 
-            <div class="input-group">
-                <label for="material">Materiał:</label>
-                <input type="text" id="material" list="material-list" required>
-                <datalist id="material-list"></datalist>
-            </div>
+  <label for="material">Materiał:</label>
+  <input list="material-list" id="material" />
+  <datalist id="material-list"></datalist><br />
 
-            <button onclick="calculatePrice()">Oblicz cenę</button>
-        </div>
+  <label for="quantity">Ilość sztuk:</label>
+  <input type="number" id="quantity" min="1" value="1" /><br />
 
-        <p id="result"></p>
-    </main>
+  <button onclick="addItem()">Dodaj pozycję</button>
 
-    <script>
-        const API_URL = "https://kalkulator-zaluzji.onrender.com";
-    
-        document.getElementById("system").addEventListener("change", function () {
-            const system = this.value;
-            const width2Group = document.getElementById("width2-group");
-            width2Group.style.display = (system === "9_10" || system === "13") ? "block" : "none";
-        });
-    
-        window.addEventListener("DOMContentLoaded", async () => {
-            try {
-                const response = await fetch(`${API_URL}/materialy/plisy`);
-                const data = await response.json();
-                if (data.materialy) {
-                    const datalist = document.getElementById("material-list");
-                    data.materialy.forEach(material => {
-                        const option = document.createElement("option");
-                        option.value = material;
-                        datalist.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error("Błąd ładowania materiałów:", error);
-            }
-        });
-    
-    
-  async function calculatePrice() {
-    const system = document.getElementById("system").value;
-    const width = document.getElementById("width").value;
-    const height = document.getElementById("height").value;
-    const material = document.getElementById("material").value.trim();
-    const width2 = document.getElementById("width2").value || null;
+  <table id="summaryTable">
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>Szerokość</th>
+        <th>Wysokość</th>
+        <th>Materiał</th>
+        <th>Ilość</th>
+        <th>Cena/szt</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-    if (!width || !height || !material) {
-      document.getElementById("result").innerText = "Wprowadź wszystkie dane!";
-      return;
-    }
+  <button onclick="calculateTotal()">Oblicz wszystko</button>
+  <div id="result"></div>
 
-    const url = new URL(`${API_URL}/cena/plisy`);
-    url.searchParams.append("system", system);
-    url.searchParams.append("szerokosc", width);
-    url.searchParams.append("wysokosc", height);
-    url.searchParams.append("material", material);
-    if (width2) url.searchParams.append("szerokosc2", width2);
+  <script>
+    const API_URL = "https://kalkulator-zaluzji.onrender.com";
+    const positions = [];
 
-    try {
-      const response = await fetch(url);
+    async function loadMaterials() {
+      const response = await fetch(`${API_URL}/materialy/plisy`);
       const data = await response.json();
-      console.log("ODPOWIEDŹ:", data);
-
-      if (response.ok && "cena" in data) {
-        document.getElementById("result").innerText = `Cena: ${data.cena} zł`;
-      } else {
-        document.getElementById("result").innerText = `Błąd: ${data.error || "Brak ceny w odpowiedzi."}`;
-      }
-    } catch (err) {
-      console.error(err);
-      document.getElementById("result").innerText = "Błąd połączenia z serwerem.";
+      const datalist = document.getElementById("material-list");
+      datalist.innerHTML = "";
+      data.materialy.forEach(mat => {
+        const option = document.createElement("option");
+        option.value = mat;
+        datalist.appendChild(option);
+      });
     }
-  }
 
+    async function getPrice(system, width, height, material) {
+      const url = new URL(`${API_URL}/cena/plisy`);
+      url.searchParams.append("system", system);
+      url.searchParams.append("szerokosc", width);
+      url.searchParams.append("wysokosc", height);
+      url.searchParams.append("material", material);
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (response.ok && "cena" in data) {
+          return data.cena;
+        } else {
+          return null;
+        }
+      } catch {
+        return null;
+      }
+    }
 
+    async function addItem() {
+      const system = document.getElementById("system").value;
+      const width = document.getElementById("width").value;
+      const height = document.getElementById("height").value;
+      const material = document.getElementById("material").value.trim();
+      const quantity = parseInt(document.getElementById("quantity").value);
 
-    </script>
-    
+      if (!width || !height || !material || quantity < 1) {
+        alert("Wprowadź poprawne dane.");
+        return;
+      }
+
+      const price = await getPrice(system, width, height, material);
+
+      if (price === null) {
+        alert("Nie udało się pobrać ceny dla tej pozycji.");
+        return;
+      }
+
+      positions.push({ system, width, height, material, quantity, price });
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>System_${system}</td><td>${width}</td><td>${height}</td><td>${material}</td><td>${quantity}</td><td>${price} zł</td>`;
+      document.querySelector("#summaryTable tbody").appendChild(row);
+    }
+
+    function calculateTotal() {
+      const total = positions.reduce((sum, p) => sum + p.quantity * p.price, 0);
+      document.getElementById("result").innerText = `SUMA: ${total} zł`;
+    }
+
+    loadMaterials();
+  </script>
 </body>
 </html>
